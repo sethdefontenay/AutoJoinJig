@@ -1,9 +1,16 @@
 #include <MultiStepper.h>
 #include <AccelStepper.h>
 #include <StackArray.h>
+// Button Pins
 const int advanceButtonPin = 6;
 const int retractButtonPin = 7;
 const int zeroButtonPin = 8;
+
+//Stepper Pins
+const int enablePin = 6;
+const int stepPin = 11;
+const int directionPin = 12;
+
 int buttons[] = { advanceButtonPin, retractButtonPin, zeroButtonPin };
 double currentPosition = 0;
 double fingerCount = 1;
@@ -12,10 +19,14 @@ double bladeWidth = 3.175;
 bool advanceToNextSpace = false;
 int stepsPerMM = 100;
 StackArray <double> moveHistory;
+AccelStepper stepper(1, stepPin, directionPin);
 
 void setup()
 {
 	registerButtonPins();
+	stepper.setMaxSpeed(1000);
+	stepper.setSpeed(100);
+	stepper.setAcceleration(300);
 }
 
 void loop()
@@ -102,7 +113,7 @@ void fullRetract()
 }
 
 void doAMove(double move) {
-	// stepper.step(stepsPerMM * move);
+	stepper.runToNewPosition(stepsPerMM * move);
 }
 
 void setZero()
