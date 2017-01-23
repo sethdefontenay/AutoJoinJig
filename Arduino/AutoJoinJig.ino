@@ -35,6 +35,7 @@ void loop()
 	if (button != -1) {
 		buttonAction(button);
 	}
+	stepper.run();
 }
 
 void registerButtonPins() {
